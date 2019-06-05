@@ -1,0 +1,51 @@
+extends ../layout
+
+block content
+    h1 Books
+    div(id='actions')
+        a(class='button', href='/books/new') Create New Book
+        form(method="GET", action='/books')
+            label(for='searchString') Search:
+            input(name='searchString', type='text', id='searchString' value=search)
+            input(type='submit', value='Search')
+            a(class='button', href='/books') Reset
+    if books.length > 0
+        table
+            thead
+                tr
+                    th Title
+                    th Author
+                    th Genre
+                    th Year
+            tbody
+              each book in books
+                tr
+                    td
+                        a(href=`books/${book.id}`)= book.title
+                    td= book.author
+                    td= book.genre
+                    td= book.year
+    else if search
+        p We could not locate any books with <strong>#{search}</strong> in the title.
+    else
+        p No books are currently in the Database. Please start by adding one.
+    div(id='pagination')
+        div(id='paging')
+            a(class=`button${pages === 1 || currentPage === 0 ? ' disabled' : ''}`, href=`/books?${search ? `searchString=${search}&`: ''}limit=${limit}&page=0`) <<
+            a(class=`button${pages === 1 || currentPage === 0 ? ' disabled' : ''}`, href=`/books?${search ? `searchString=${search}&`: ''}limit=${limit}&page=${currentPage > 0 ? currentPage - 1 : currentPage}`) <
+            - var n = 1;
+            while n <= pages
+                a(class=`button${pages === 1 || currentPage === n - 1 ? ' disabled' : ''}`, href=`/books?${search ? `searchString=${search}&`: ''}limit=${limit}&page=${n - 1}`)= n++
+            a(class=`button${pages === 1 || currentPage === pages - 1 ? ' disabled' : ''}`, href=`/books?${search ? `searchString=${search}&`: ''}limit=${limit}&page=${currentPage < pages - 1 ? currentPage + 1 : pages - 1}`) >
+            a(class=`button${pages === 1 || currentPage === pages - 1 ? ' disabled' : ''}`, href=`/books?${search ? `searchString=${search}&`: ''}limit=${limit}&page=${pages - 1}`) >>
+        div(id='pageSize')
+            form(method='GET', action='/books')
+                label(for='limit') Page size:
+                select(name='limit', id='limit')
+                    option(value="5", selected=limit === 5 ? 'selected' : false) 5
+                    option(value="10", selected=limit === 10 ? 'selected' : false) 10
+                    option(value="20", selected=limit === 20 ? 'selected' : false) 20
+                input(type='hidden', name='page', value='0')
+                if search
+                    input(type='hidden', name='searchString', value=search)
+                input(type='submit', value='Update')

@@ -1,0 +1,5 @@
+form(method='POST', action=`/books/${book.id}?_method=DELETE`, onsubmit='return confirm("Do you really wan to delete this book?");')
+    p
+        a(class='button', href='/') Cancel
+    p
+        input(type='submit', value='Delete Book')

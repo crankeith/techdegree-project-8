@@ -1,0 +1,9 @@
+extends ../layout
+
+block content
+    h1 Update Book
+    form(method='POST', action=`/books/${book.id}?_method=PUT`)
+        include form
+        p
+            input(type='submit', value='Update Book')
+    include delete
