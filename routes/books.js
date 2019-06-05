@@ -26,9 +26,28 @@ router.get('/', (req, res, next) => {
     //Add search string to options if present
     if( searchString ){
         const likeClause = {
-            title: {
-                [Op.like]: `%${searchString}%`
-            }
+            [Op.or]: [
+                {
+                    title: {
+                        [Op.like]: `%${searchString}%`
+                    }
+                },
+                {
+                    author: {
+                        [Op.like]: `%${searchString}%`
+                    }
+                },
+                {
+                    genre: {
+                        [Op.like]: `%${searchString}%`
+                    }
+                },
+                {
+                    year: {
+                        [Op.like]: `%${searchString}%`
+                    }
+                },
+            ]
         };
 
         countTotalOptions["where"] = likeClause;
